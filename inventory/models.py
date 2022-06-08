@@ -12,9 +12,9 @@ class MenuItem(models.Model):
     def available(self):
         return all(x.enough() for x in self.recipe_set.all())
     
-    # class Meta:
-    #     ordering = ['title']
-    #     verbose_name = 'menu item'
+    class Meta:
+        ordering = ['title']
+        verbose_name = 'menu item'
     
     def __str__(self):
         return f'{self.title}; {self.price}'
@@ -67,12 +67,9 @@ class Recipe(models.Model):
 class Purchase(models.Model):
     menu_item = models.ForeignKey('MenuItem', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
-    
-    # class Meta:
-    #     ordering = ['timestamp']
-        
+           
     def __str__(self):
         return f'[{self.menu_item.__str__()}]; {self.timestamp}'
     
     def get_absolute_url(self):
-        return '/purchase'
+        return '/purchases'

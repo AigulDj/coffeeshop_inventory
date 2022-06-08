@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 {% load static %} 
-{% block head %}{% endblock %}
+{% block head %}
+{% endblock %}
 {% block content %}
     <h2>Purchases</h2>
-    <a href="{% url 'purchasecreate' %}">Record New Purchase</a>
-    <hr/>
     <table class="inventory-table">
         <thead>
             <tr>
@@ -14,7 +13,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for purchase in object_list %}
+        {% for purchase in purchases %}
             <tr>
                 <td>{{ purchase.menu_item.title }}</td>
                 <td class="price">${{ purchase.menu_item.price|stringformat:".2f" }}</td>
@@ -23,4 +22,9 @@
         {% endfor %}
         </tbody>
     </table>
+    <hr/>
+    <h2>Totals</h2>
+    <div style="color: green;">Total Revenue: ${{ revenue|stringformat:".2f" }}</div>
+    <div style="color: red;">Total Cost: ${{ total_cost|stringformat:".2f" }}</div>
+    <div style="color: blue;">Total Profit: ${{ profit|stringformat:".2f" }}</div>
 {% endblock %}

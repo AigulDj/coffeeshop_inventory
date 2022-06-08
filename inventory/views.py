@@ -1,73 +1,120 @@
 from django.shortcuts import redirect
 
+from django.db.models import Sum
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-#from django.http import Http404
+# from django.http import Http404
 
 from .models import Ingredient, MenuItem, Recipe, Purchase
+from .forms import IngredientForm, MenuItemForm, RecipeForm
 
-class Home(TemplateView):
+
+class Home(LoginRequiredMixin, TemplateView):
     template_name = "inventory/home.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["ingredients"] = Ingredient.objects.all()
         context["menu_items"] = MenuItem.objects.all()
+        context["purchases"] = Purchase.objects.all()
         return context
 
-# LIST
-class IngredientList(ListView):
+# INGREDIENT
+
+class IngredientList(LoginRequiredMixin, ListView):
     model = Ingredient
     template_name = 'inventory/ingredient_list.html'
+   
     
-class MenuItemList(ListView):
-    model = MenuItem
-    template_name = 'inventory/menuitem_list.html'
-    
-# Class RecipeList(ListView):
-#     model = Recipe
-#     template_name = 'inventory/recipe_list.html'
-    
-class PurchaseList(ListView):
-    model = Purchase
-    template_name = 'inventory/purchase_list.html'
-
-# DELETE  
- 
-class IngredientDelete(DeleteView):
-    model = Ingredient
-    template_name = 'inventory/ingredient_delete.html'
-    
-class MenuItemDelete(DeleteView):
-    model = MenuItem
-    template_name = 'inventory/menuitem_delete.html'
-
-# CREATE  
 class IngredientCreate(CreateView):
     model = Ingredient
     template_name = 'inventory/ingredient_create.html'
-    fields = ['name', 'quantity', 'unit_price', 'unit']
+    form_class = IngredientForm
+   
+    
+class IngredientUpdate(UpdateView):
+    model = Ingredient
+    template_name = 'inventory/ingredient_update.html'
+    form_class = IngredientForm
+    
+# class IngredientDelete(DeleteView):
+#     model = Ingredient
+#     template_name = 'inventory/ingredient_delete.html'
+    
+# MENUITEM 
+
+class MenuItemList(ListView):
+    model = MenuItem
+    template_name = 'inventory/menuitem_list.html'
+
     
 class MenuItemCreate(CreateView):
     model = MenuItem
     template_name = 'inventory/menuitem_create.html'
-    fields = ['price', 'title']
+    form_class = MenuItemForm
+        
+# class MenuItemDelete(DeleteView):
+#     model = MenuItem
+#     template_name = 'inventory/menuitem_delete.html
     
+# RECIPE 
+
 class RecipeCreate(CreateView):
     model = Recipe
     template_name = 'inventory/recipe_create.html'
-    fields = ['menuitem', 'ingredient', 'quantity']
-    
-# UPDATE
+    form_class = RecipeForm
+   
+# PURCHASE
 
-class IngredientUpdate(UpdateView):
-    model = Ingredient
-    template_name = 'inventory/ingredient_update.html'
-    fields = ['name', 'quantity', 'unit_price', 'unit']
+class PurchaseList(ListView):
+    model = Purchase
+    template_name = 'inventory/purchase_list.html'
     
-class MenuItemUpdate(UpdateView):
-    model = MenuItem
-    template_name = 'inventory/menuitem_update.html'
-    fields = ['price', 'title']
+    
+class PurchaseCreate(TemplateView):
+    template_name = 'inventory/purchase_create.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu_items'] = [x for x in MenuItem.objects.all() if x.available()]
+    
+    def post(self, request):
+        menu_item_id = request.POST['menu_item']
+        menu_item = MenuItem.objects.get(pk=menu_item_id)
+        requirements = menu_item.recipe_set
+        purchase = Purchase(menu_item=menu_item)
+
+        for requirement in requirements.all():
+            required_ingredient = requirement.ingredient
+            required_ingredient.quantity -= requirement.quantity
+            required_ingredient.save()
+
+        purchase.save()
+        return redirect("/purchases")
+   
+    
+class ReportView(LoginRequiredMixin, TemplateView):
+    template_name = "inventory/reports.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["purchases"] = Purchase.objects.all()
+        revenue = Purchase.objects.aggregate(revenue=Sum("menu_item__price"))["revenue"]
+        total_cost = 0
+        for purchase in Purchase.objects.all():
+            for recipe_requirement in purchase.menu_item.recipe_set.all():
+                total_cost += recipe_requirement.ingredient.unit_price *\
+                    recipe_requirement.quantity
+
+        context["revenue"] = revenue
+        context["total_cost"] = total_cost
+        context["profit"] = revenue - total_cost
+
+        return context
+    
+    
+def log_out(request):
+    logout(request)
+    return redirect("/")
