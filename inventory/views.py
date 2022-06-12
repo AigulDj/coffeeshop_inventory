@@ -38,11 +38,7 @@ class IngredientUpdate(UpdateView):
     model = Ingredient
     template_name = 'inventory/ingredient_update.html'
     form_class = IngredientForm
-    
-# class IngredientDelete(DeleteView):
-#     model = Ingredient
-#     template_name = 'inventory/ingredient_delete.html'
-    
+      
 # MENUITEM 
 
 class MenuItemList(ListView):
@@ -79,22 +75,24 @@ class PurchaseCreate(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['menu_items'] = [x for x in MenuItem.objects.all() if x.available()]
+        return context
     
     def post(self, request):
         menu_item_id = request.POST['menu_item']
         menu_item = MenuItem.objects.get(pk=menu_item_id)
-        requirements = menu_item.recipe_set
+        requirements = menu_item.recipe_set.all()
         purchase = Purchase(menu_item=menu_item)
 
         for requirement in requirements.all():
-            required_ingredient = requirement.ingredient
-            required_ingredient.quantity -= requirement.quantity
-            required_ingredient.save()
+            ingredient = requirement.ingredient
+            ingredient.quantity -= requirement.quantity
+            ingredient.save()
 
         purchase.save()
         return redirect("/purchases")
    
-    
+# REPORT
+
 class ReportView(LoginRequiredMixin, TemplateView):
     template_name = "inventory/reports.html"
 
@@ -105,12 +103,12 @@ class ReportView(LoginRequiredMixin, TemplateView):
         total_cost = 0
         for purchase in Purchase.objects.all():
             for recipe_requirement in purchase.menu_item.recipe_set.all():
-                total_cost += recipe_requirement.ingredient.unit_price *\
-                    recipe_requirement.quantity
+                total_cost += recipe_requirement.ingredient.unit_price * recipe_requirement.quantity
 
         context["revenue"] = revenue
         context["total_cost"] = total_cost
-        context["profit"] = revenue - total_cost
+        if revenue:
+            context["profit"] = revenue - total_cost
 
         return context
     

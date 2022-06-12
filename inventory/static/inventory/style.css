@@ -1,5 +1,6 @@
 body {
     font-family: 'Oxygen', sans-serif;
+    color: #424642;
 }
 
 input, select {
@@ -16,7 +17,7 @@ hr {
 }
 
 header {
-    background-color: #FFF0E5;
+    background-color: #F3F4ED;
     min-height: 200px;
     display: flex;
     align-items: center;
@@ -85,7 +86,7 @@ form label {
 input[type=submit], button {
     border: 0px;
     width: 100%;
-    background-color: #1557FF;
+    background-color: #C06014;
     border-radius: 5px;
     color: white;
     margin: 8px 0;
@@ -111,12 +112,12 @@ header p {
 .navbar a {
     text-decoration: none;
     padding: 8px 0;
-    color: #1557FF;
+    color: #C06014;
     margin-right: 15px;
 }
 
 .navbar a:hover, .navbar .current-page {
-    border-bottom: solid 4px #1557FF;
+    border-bottom: solid 4px #C06014;
     border-spacing: 0 15px;
     font-weight: bold;
 }
@@ -139,7 +140,7 @@ main table {
     text-align: center;
     text-decoration: none;
     border: 0px;
-    background-color: #1557FF;
+    background-color: #C06014;
     border-radius: 5px;
     color: white;
     padding: 10px;
@@ -195,7 +196,7 @@ main table {
 
 a {
     text-decoration: none;
-    color: #1557FF;
+    color: #C06014;
 }
 a:hover {
     font-weight: bold;

@@ -22,35 +22,27 @@ class MenuItem(models.Model):
     
 class Ingredient(models.Model):
     UNIT_CHOICES = [
-        ('kg', 'kg'),
-        ('gr', 'gr'),
-        ('ltr', 'liter'),
-        ('tbs', 'tbs'),
+        ('--', '--'),
+        ('pc.', 'pc.'),
+        ('g', 'g'),
+        ('ml', 'ml'),
+        ('tbsp', 'tbsp'),
         ('tsp', 'tsp'),
     ]
     name = models.CharField(max_length=100, unique=True)
     quantity = models.FloatField(default=0)
-    unit = models.CharField(max_length=4, choices=UNIT_CHOICES, default='gr')
+    unit = models.CharField(max_length=4, choices=UNIT_CHOICES, default='--')
     unit_price = models.FloatField(default=0)
     
     def get_absolute_url(self):
         return '/ingredients'
     
-    
     def __str__(self):
-        return f'{self.name}; {self.quantity}; {self.unit}; {self.unit_price}'
+        return f'{self.name}; {self.quantity} {self.unit}; {self.unit_price}'
 
 
-class Recipe(models.Model):
-    UNIT_CHOICES = [
-        ('kg', 'kg'),
-        ('gr', 'gr'),
-        ('ltr', 'liter'),
-        ('tbs', 'tbs'),
-        ('tsp', 'tsp'),
-    ]
-    
-    menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE) # Delete item in menu too
+class Recipe(models.Model):   
+    menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE) # Deletes item in Menu too
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE) # models.PROTECT Won't delete item in ingredient
     quantity = models.FloatField(default=0)
        
@@ -65,11 +57,11 @@ class Recipe(models.Model):
     
     
 class Purchase(models.Model):
-    menu_item = models.ForeignKey('MenuItem', on_delete=models.CASCADE)
+    menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
            
     def __str__(self):
-        return f'[{self.menu_item.__str__()}]; {self.timestamp}'
+        return f'[{self.menu_item}]; {self.timestamp}'
     
     def get_absolute_url(self):
         return '/purchases'
