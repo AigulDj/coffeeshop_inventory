@@ -7,16 +7,14 @@
         <thead>
             <tr>
                 <th>Menu Item</th>
-                <th>Price</th>
-                <th>Time</th>
+                <th>Total</th>               
             </tr>
         </thead>
         <tbody>
-        {% for purchase in purchases %}
+        {% for title, nums in item_total.items %}
             <tr>
-                <td>{{ purchase.menu_item.title }}</td>
-                <td class="price">${{ purchase.menu_item.price|stringformat:".2f" }}</td>
-                <td>{{ purchase.timestamp }}</td>
+                <td>{{ title }}</td>                
+                <td>{{ nums }}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -25,5 +23,5 @@
     <h2>Totals</h2>
     <div style="color: green;">Total Revenue: ${{ revenue|stringformat:".2f" }}</div>
     <div style="color: red;">Total Cost: ${{ total_cost|stringformat:".2f" }}</div>
-    <div style="color: #536162;">Total Profit: ${{ profit|stringformat:".2f" }}</div>
+    <div style="color: #536162; margin-top: 0.5em;">Total Profit: ${{ profit|stringformat:".2f" }}</div>
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
 from django.views.generic import ListView, TemplateView
@@ -50,11 +50,7 @@ class MenuItemCreate(CreateView):
     model = MenuItem
     template_name = 'inventory/menuitem_create.html'
     form_class = MenuItemForm
-        
-# class MenuItemDelete(DeleteView):
-#     model = MenuItem
-#     template_name = 'inventory/menuitem_delete.html
-    
+            
 # RECIPE 
 
 class RecipeCreate(CreateView):
@@ -101,10 +97,14 @@ class ReportView(LoginRequiredMixin, TemplateView):
         context["purchases"] = Purchase.objects.all()
         revenue = Purchase.objects.aggregate(revenue=Sum("menu_item__price"))["revenue"]
         total_cost = 0
-        for purchase in Purchase.objects.all():
+        items_count = {}
+        
+        for purchase in context["purchases"]:
+            items_count[purchase.menu_item.title] = items_count.get(purchase.menu_item.title, 0)+1
             for recipe_requirement in purchase.menu_item.recipe_set.all():
                 total_cost += recipe_requirement.ingredient.unit_price * recipe_requirement.quantity
-
+        
+        context['item_total'] = items_count
         context["revenue"] = revenue
         context["total_cost"] = total_cost
         if revenue:

@@ -126,7 +126,7 @@ main table {
     text-align: left;
     border-collapse: separate;
     border-spacing: 0 15px;
-    width: 80%;
+    width: 40%;
 }
 
 .header-first-row {
@@ -184,10 +184,6 @@ main table {
 
 .menu-item-title {
     font-weight: bold;
-}
-
-.menu-item-ingredients {
-    padding: 20px 0;
 }
 
 .menu-item-ingredients * {
