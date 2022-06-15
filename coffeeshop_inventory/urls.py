@@ -16,7 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from inventory import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('inventory.urls')),
 ]
+
+# To automatic deployments to a Django Web-App hosted on PythonAnywhere
+urlpatterns = [
+    path("update_server/", views.update, name="update"),
+]
+
