@@ -23,8 +23,8 @@ urlpatterns = [
     path('', include('inventory.urls')),
 ]
 
-# To automatic deployments to a Django Web-App hosted on PythonAnywhere
-urlpatterns = [
-    path("update_server/", views.update, name="update"),
-]
+# # To automatic deployments to a Django Web-App hosted on PythonAnywhere
+# urlpatterns = [
+#     path("update_server/", views.update, name="update"),
+# ]
 

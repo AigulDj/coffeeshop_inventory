@@ -9,22 +9,22 @@ from django.views.generic.edit import CreateView, UpdateView
 from .models import Ingredient, MenuItem, Recipe, Purchase
 from .forms import IngredientForm, MenuItemForm, RecipeForm
 
-import git
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
+# import git
+# from django.http import HttpResponse
+# from django.views.decorators.csrf import csrf_exempt
 
 # Automatic deployments to a Django Web-App hosted on PythonAnywhere
-@csrf_exempt
-def update(request):
-    if request.method == "POST":
-        repo = git.Repo("aiguldj.eu.pythonanywhere.com/") 
-        origin = repo.remotes.origin
-
-        origin.pull()
-
-        return HttpResponse("Updated code on PythonAnywhere")
-    else:
-        return HttpResponse("Couldn't update the code on PythonAnywhere")
+# @csrf_exempt
+# def update(request):
+#     if request.method == "POST":
+#         repo = git.Repo("aiguldj.eu.pythonanywhere.com/")
+#         origin = repo.remotes.origin
+#
+#         origin.pull()
+#
+#         return HttpResponse("Updated code on PythonAnywhere")
+#     else:
+#         return HttpResponse("Couldn't update the code on PythonAnywhere")
     
     
 class Home(LoginRequiredMixin, TemplateView):
