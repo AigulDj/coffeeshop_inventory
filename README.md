@@ -1,5 +1,5 @@
 # coffeeshop_inventory
-Application that will help keep track of purchases, ingredients, menu items etc.
+Application to help keep track of purchases, ingredients, menu items etc.
 
 The owner of the coffee shop will be able to look through:
 - An inventory of different Ingredients, their available quantity, and their prices per unit
