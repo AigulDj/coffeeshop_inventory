@@ -12,3 +12,8 @@ Knowing that information, The user will be able to use the following features:
 - Add to the inventory a name of an ingredient, its price per unit, and how much of that item is available.
 - Enter in a customer purchase of a menu item. When a customer purchases an item off the menu, 
 the inventory will be modified to accommodate what happened, as well as recording the time that the purchase was made.
+
+#### Docker commands to pull the image from docker hub & run the container:
+
+- docker pull aiguldj/coffeeshop-inventory:latest
+- docker run --name coffeeshop -d -p 8000:8000 aiguldj/coffeeshop-inventory:latest
