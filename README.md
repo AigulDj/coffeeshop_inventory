@@ -1,19 +1,24 @@
-# coffeeshop_inventory
-Application to help keep track of purchases, ingredients, menu items etc.
+# Coffee Shop Inventory Management Application
 
-The owner of the coffee shop will be able to look through:
-- An inventory of different Ingredients, their available quantity, and their prices per unit
-- A list of the MenuItems, and the price set for each entry
-- A list of the ingredients that each menu item requires (RecipeRequirements)
-- A log of all Purchases made at the restaurant
+A web-based application to help coffee shop owners keep track of purchases, ingredients, menu items, and more. 
+The app features the following functionalities:
 
-Knowing that information, The user will be able to use the following features:
-- Enter in new recipes along with their recipe requirements, and how much that menu item costs.
-- Add to the inventory a name of an ingredient, its price per unit, and how much of that item is available.
-- Enter in a customer purchase of a menu item. When a customer purchases an item off the menu, 
-the inventory will be modified to accommodate what happened, as well as recording the time that the purchase was made.
+- An inventory of ingredients, including available quantity and prices per unit
+- A list of menu items and their prices
+- Recipe requirements for each menu item
+- A log of all purchases made at the coffee shop
 
-#### Docker commands to pull the image from docker hub & run the container:
+With this information, coffee shop owners can:
+
+- Add new menu items, including their recipe requirements and costs
+- Add new ingredients to the inventory, including their prices and quantities
+- Record customer purchases, which automatically updates the inventory and purchase log
+
+To run the application using Docker, execute the following commands:
 
 - docker pull aiguldj/coffeeshop-inventory:latest
 - docker run --name coffeeshop -d -p 8000:8000 aiguldj/coffeeshop-inventory:latest
+
+Note: The container name can be changed to your liking.
+
+The application is built using Django, Python, SQLite, and a REST API. The user interface is designed with HTML5 and CSS3 (Bootstrap).
